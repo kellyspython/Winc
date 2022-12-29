@@ -23,27 +23,68 @@ class Player:
         return f"Hello everyone, my name is {self.name}."
 
 
-    def strength(self):
-
-        strenght_tuple = max(self.speed, self.endurance, self.accuracy)
-        return strenght_tuple
-
-
-        # if self.speed > self.endurance and self.speed > self.accuracy:
-        #     return ("speed", self.speed)
-        # elif self.endurance > self.speed and self.endurance > self.accuracy:
-        #     return ("endurance", self.endurance)
-        # elif self.accuracy > self.speed and self.accuracy > self.endurance:
-        #     return ("accuracy", self.accuracy)
-        # elif self.speed > self.endurance and self.speed == self.accuracy:
-        #     return ("speed", self.speed, "accuracy", self.accuracy)
-        # elif self.speed == self.endurance and self.speed > self.accuracy:
-        #     return ("speed", self.speed, "endurance", self.endurance)
+    def strength(self):        
+        if self.speed == self.endurance and self.speed == self.accuracy:
+            return ("speed", self.speed, "endurance", self.endurance, "accuracy", self.accuracy) 
+            
+        elif self.speed > self.endurance and self.speed == self.accuracy:
+            return ("speed", self.speed, "accuracy", self.accuracy)
+        elif self.speed == self.endurance and self.speed > self.accuracy:
+            return ("speed", self.speed, "endurance", self.endurance)
         
+        elif self.endurance > self.speed and self.endurance == self.accuracy:
+            return ("endurance", self.endurance, "accuracy", self.accuracy)
+        elif self.endurance > self.accuracy and self.endurance == self.speed:
+            return ("endurance", self.endurance, "speed", self.speed) 
 
+        elif self.accuracy > self.endurance and self.accuracy == self.speed:
+            return ("speed", self.speed, "accuracy", self.accuracy)
+        elif self.accuracy > self.speed and self.accuracy == self.endurance:
+            return ("endurance", self.endurance, "accuracy", self.accuracy)
+               
+        elif self.speed > self.endurance and self.speed > self.accuracy:
+            return ("speed", self.speed)
+        elif self.endurance > self.speed and self.endurance > self.accuracy:
+            return ("endurance", self.endurance)
+        elif self.accuracy > self.speed and self.accuracy > self.endurance:
+            return ("accuracy", self.accuracy)
    
+kelly = Player("kelly", 0.6, 0.6, 0.6)
+monica = Player("monica", 0.4, 0.5, 0.9)
+
+class Commentator:
+    def __init__(self, name):
+        self.name = name
+
+    # Get information out class Player return sum
+    def sum_player(Player):  
+        player_name = getattr(Player, "name", 0)
+        player_speed = getattr(Player, "speed", 0)
+        player_endurance = getattr(Player, "endurance", 0)
+        player_accuracy = getattr(Player, "accuracy", 0)
+        sum = (player_speed + player_endurance + player_accuracy)
+        return sum
 
 
-kelly = Player("kelly",0.6,0.6,0.5)
+    def compare_players(player_1, player_2, strenght):
         
-print(kelly.strength())
+        player_1 = Player()
+        player_1_name = getattr(Player, "name", 0)
+        player_1_speed = getattr(Player, "speed", 0)
+        player_1_endurance = getattr(Player, "endurance", 0)
+        player_1_accuracy = getattr(Player, "accuracy", 0)
+
+        player_2 = Player()
+        player_2_name = getattr(Player, "name", 0)
+        player_2_speed = getattr(Player, "speed", 0)
+        player_2_endurance = getattr(Player, "endurance", 0)
+        player_2_accuracy = getattr(Player, "accuracy", 0)
+
+        if strenght == "speed":
+            print(f"{player_1}, {player_1_speed}")
+
+        print()
+
+ray = Commentator('Ray Hudson')
+
+print(ray.compare_players(kelly, monica, "speed"))
