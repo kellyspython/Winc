@@ -48,9 +48,8 @@ class Player:
             return ("endurance", self.endurance)
         if self.accuracy > self.speed and self.accuracy > self.endurance:
             return ("accuracy", self.accuracy)
-   
-kelly = Player("kelly", 0.3, 0.6, 0.6)
-monica = Player("monica", 0.4, 0.5, 0.9)
+
+
 
 class Commentator:
     def __init__(self, name):
@@ -66,17 +65,25 @@ class Commentator:
         return sum
 
 
-    def compare_players(self, player_1, player_2, attr):      
-        
+    def compare_players(self, player_1, player_2, attr):
         p_1_name = getattr(player_1, "name")
         p_1_attr = getattr(player_1, attr)
-        
         p_2_name = getattr(player_2, "name")
         p_2_attr= getattr(player_2, attr)
+        if p_1_attr > p_2_attr:
+            return p_1_name
+        elif p_1_attr == p_2_attr:
+            sum_p1 = Commentator.sum_player(self, player_1)
+            sum_p2 = Commentator.sum_player(self,player_2)
+            if sum_p1 > sum_p2:
+                return p_1_name
+            else:
+                return p_2_name
+        else:
+            return p_2_name
        
-
-        print(f"{p_1_name}, {p_1_attr} : {p_2_name}, {p_2_attr}")
-
+kelly = Player("kelly", 0.4, 0.3, 0.6)
+monica = Player("monica", 0.4, 0.5, 0.9)
 ray = Commentator('Ray Hudson')
 
-print(ray.compare_players(kelly, monica, "endurance"))
+print(ray.compare_players(kelly, monica, "speed"))
