@@ -77,6 +77,8 @@ class Commentator:
             sum_p2 = Commentator.sum_player(self,player_2)
             if sum_p1 > sum_p2:
                 return p_1_name
+            elif sum_p1 == sum_p2:
+                return "These two players might as well be twins!"
             else:
                 return p_2_name
         else:
