@@ -39,7 +39,7 @@ def find_password(cachedfiles):
             if "password" in text:
 
                 find_space = text.find(" ")
-                password_begin = text[find_space:]            
+                password_begin = text[find_space +1:]            
                 find_n = password_begin.find("\n")
                 password = password_begin[:find_n]                  
                 return password             
