@@ -27,29 +27,29 @@ class Player:
         if self.speed == self.endurance and self.speed == self.accuracy:
             return ("speed", self.speed, "endurance", self.endurance, "accuracy", self.accuracy) 
             
-        elif self.speed > self.endurance and self.speed == self.accuracy:
+        if self.speed > self.endurance and self.speed == self.accuracy:
             return ("speed", self.speed, "accuracy", self.accuracy)
-        elif self.speed == self.endurance and self.speed > self.accuracy:
+        if self.speed == self.endurance and self.speed > self.accuracy:
             return ("speed", self.speed, "endurance", self.endurance)
         
-        elif self.endurance > self.speed and self.endurance == self.accuracy:
+        if self.endurance > self.speed and self.endurance == self.accuracy:
             return ("endurance", self.endurance, "accuracy", self.accuracy)
-        elif self.endurance > self.accuracy and self.endurance == self.speed:
+        if self.endurance > self.accuracy and self.endurance == self.speed:
             return ("endurance", self.endurance, "speed", self.speed) 
 
-        elif self.accuracy > self.endurance and self.accuracy == self.speed:
+        if self.accuracy > self.endurance and self.accuracy == self.speed:
             return ("speed", self.speed, "accuracy", self.accuracy)
-        elif self.accuracy > self.speed and self.accuracy == self.endurance:
+        if self.accuracy > self.speed and self.accuracy == self.endurance:
             return ("endurance", self.endurance, "accuracy", self.accuracy)
                
-        elif self.speed > self.endurance and self.speed > self.accuracy:
+        if self.speed > self.endurance and self.speed > self.accuracy:
             return ("speed", self.speed)
-        elif self.endurance > self.speed and self.endurance > self.accuracy:
+        if self.endurance > self.speed and self.endurance > self.accuracy:
             return ("endurance", self.endurance)
-        elif self.accuracy > self.speed and self.accuracy > self.endurance:
+        if self.accuracy > self.speed and self.accuracy > self.endurance:
             return ("accuracy", self.accuracy)
    
-kelly = Player("kelly", 0.6, 0.6, 0.6)
+kelly = Player("kelly", 0.3, 0.6, 0.6)
 monica = Player("monica", 0.4, 0.5, 0.9)
 
 class Commentator:
@@ -57,7 +57,7 @@ class Commentator:
         self.name = name
 
     # Get information out class Player return sum
-    def sum_player(Player):  
+    def sum_player(self, Player):  
         player_name = getattr(Player, "name", 0)
         player_speed = getattr(Player, "speed", 0)
         player_endurance = getattr(Player, "endurance", 0)
@@ -66,25 +66,17 @@ class Commentator:
         return sum
 
 
-    def compare_players(player_1, player_2, strenght):
+    def compare_players(self, player_1, player_2, attr):      
         
-        player_1 = Player()
-        player_1_name = getattr(Player, "name", 0)
-        player_1_speed = getattr(Player, "speed", 0)
-        player_1_endurance = getattr(Player, "endurance", 0)
-        player_1_accuracy = getattr(Player, "accuracy", 0)
+        p_1_name = getattr(player_1, "name")
+        p_1_attr = getattr(player_1, attr)
+        
+        p_2_name = getattr(player_2, "name")
+        p_2_attr= getattr(player_2, attr)
+       
 
-        player_2 = Player()
-        player_2_name = getattr(Player, "name", 0)
-        player_2_speed = getattr(Player, "speed", 0)
-        player_2_endurance = getattr(Player, "endurance", 0)
-        player_2_accuracy = getattr(Player, "accuracy", 0)
-
-        if strenght == "speed":
-            print(f"{player_1}, {player_1_speed}")
-
-        print()
+        print(f"{p_1_name}, {p_1_attr} : {p_2_name}, {p_2_attr}")
 
 ray = Commentator('Ray Hudson')
 
-print(ray.compare_players(kelly, monica, "speed"))
+print(ray.compare_players(kelly, monica, "endurance"))
