@@ -42,8 +42,9 @@ candice = HomeOwner("Candice Candicedottir","Candicelane 312",["electrician", "p
 
 
 alice = Electrician("Alice Aliceville", 20)
-kelly = Electrician("Kelly van Wijk", 21)
+kelly = Electrician("Kelly van Wijk", 19)
 bob = Painter("Bob Bobsville", 30)
+monica = Painter("Monica Vargas", 25)
 craig = Plumber("Craig Craigsville",25)
 
 #print(f"{alice.name}, {alice.specialisme}, € {alice.price}")
@@ -51,11 +52,11 @@ craig = Plumber("Craig Craigsville",25)
 def contracts():
     alfred_contracts = []
     for need in alfred.needs:
-        if need == alice.specialisme or kelly.specialisme:
-            if alice.price < kelly.price:
-                alfred_contracts.append(alice.name)
+        if need == "painter":
+            if bob.price < monica.price:
+                alfred_contracts.append(bob.name)
             else:
-                alfred_contracts.append(kelly.name)
+                alfred_contracts.append(monica.name)
         elif need == bob.specialisme:
             alfred_contracts.append(bob.name)
         elif need == craig.specialisme:
@@ -80,6 +81,6 @@ def contracts():
             candice_contracts.append(craig.name)
 
     print("Alfred's contracts:", alfred_contracts)
-    print("Bert's contracts:", bert_contracts)
-    print("Candice's contracts:", candice_contracts)
+    # print("Bert's contracts:", bert_contracts)
+    # print("Candice's contracts:", candice_contracts)
 contracts()
