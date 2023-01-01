@@ -27,26 +27,26 @@ class Player:
         if self.speed == self.endurance and self.speed == self.accuracy:
             return ("speed", self.speed, "endurance", self.endurance, "accuracy", self.accuracy) 
             
-        if self.speed > self.endurance and self.speed == self.accuracy:
+        elif self.speed > self.endurance and self.speed == self.accuracy:
             return ("speed", self.speed, "accuracy", self.accuracy)
-        if self.speed == self.endurance and self.speed > self.accuracy:
+        elif self.speed == self.endurance and self.speed > self.accuracy:
             return ("speed", self.speed, "endurance", self.endurance)
         
-        if self.endurance > self.speed and self.endurance == self.accuracy:
+        elif self.endurance > self.speed and self.endurance == self.accuracy:
             return ("endurance", self.endurance, "accuracy", self.accuracy)
-        if self.endurance > self.accuracy and self.endurance == self.speed:
+        elif self.endurance > self.accuracy and self.endurance == self.speed:
             return ("endurance", self.endurance, "speed", self.speed) 
 
-        if self.accuracy > self.endurance and self.accuracy == self.speed:
+        elif self.accuracy > self.endurance and self.accuracy == self.speed:
             return ("speed", self.speed, "accuracy", self.accuracy)
-        if self.accuracy > self.speed and self.accuracy == self.endurance:
+        elif self.accuracy > self.speed and self.accuracy == self.endurance:
             return ("endurance", self.endurance, "accuracy", self.accuracy)
                
-        if self.speed > self.endurance and self.speed > self.accuracy:
+        elif self.speed > self.endurance and self.speed > self.accuracy:
             return ("speed", self.speed)
-        if self.endurance > self.speed and self.endurance > self.accuracy:
+        elif self.endurance > self.speed and self.endurance > self.accuracy:
             return ("endurance", self.endurance)
-        if self.accuracy > self.speed and self.accuracy > self.endurance:
+        elif self.accuracy > self.speed and self.accuracy > self.endurance:
             return ("accuracy", self.accuracy)
 
 
