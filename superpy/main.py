@@ -12,22 +12,27 @@ __human_name__ = "superpy"
 def main():
     fields = ['id','Product Name', 'Count','Buy date', 'Buy Price', 'Expiration Date']
     filename = "bought.csv" 
-
-
-    with open(filename, 'w') as csvfile:
-        csvwriter = csv.writer(csvfile)
-        csvwriter.writerow(fields)
-        #csvwriter.writerows(rows)
+    try:
+        with open('bought.csv', mode ='r')as file:
+            # reading the CSV file
+            csvFile = csv.reader(file)
+            # displaying the contents of the CSV file
+            # for lines in csvFile:
+            #     print(lines)
     
-    with open('bought.csv', mode ='r')as file:
-   
-    # reading the CSV file
-        csvFile = csv.reader(file)
- 
-    # displaying the contents of the CSV file
+    except FileNotFoundError:
+
+        with open(filename, 'w') as csvfile:
+            csvwriter = csv.writer(csvfile)
+            csvwriter.writerow(fields)
+    else:
+         
         for lines in csvFile:
             print(lines)
- 
+
+
+
+    
     # stdin_fileno = sys.stdin
  
     # # Keeps reading from stdin and quits only if the word 'exit' is there
@@ -58,9 +63,9 @@ def main():
     # args = parser.parse_args()
     # print(args.accumulate(args.integers))  
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--foo', help='foo help')
-    args = parser.parse_args()
+    # parser = argparse.ArgumentParser()
+    # parser.add_argument('--foo', help='foo help')
+    # args = parser.parse_args()
 
 
 
