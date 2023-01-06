@@ -13,27 +13,24 @@ def main():
     fields = ['id','Product Name', 'Count','Buy date', 'Buy Price', 'Expiration Date']
     filename = "bought.csv" 
     try:
-        with open('bought.csv', mode ='r')as file:
+        with open(filename, mode ='r')as file:
             # reading the CSV file
             csvFile = csv.reader(file)
             # displaying the contents of the CSV file
-            # for lines in csvFile:
-            #     print(lines)
+            for lines in csvFile:
+                print(lines)
     
     except FileNotFoundError:
 
         with open(filename, 'w') as csvfile:
             csvwriter = csv.writer(csvfile)
             csvwriter.writerow(fields)
-    else:
-         
-        for lines in csvFile:
-            print(lines)
+
 
 
 
     
-    # stdin_fileno = sys.stdin
+    # stdin_fileno = sys.stdin ,,,,,
  
     # # Keeps reading from stdin and quits only if the word 'exit' is there
     # # This loop, by default does not terminate, since stdin is open
