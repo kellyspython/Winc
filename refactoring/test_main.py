@@ -47,9 +47,10 @@ bob = Painter("Bob Bobsville", 30)
 monica = Painter("Monica Vargas", 25)
 craig = Plumber("Craig Craigsville",25)
 
-#print(f"{alice.name}, {alice.specialisme}, € {alice.price}")
 
 def contracts():
+    homeowners =[]
+    
     alfred_contracts = []
     for need in alfred.needs:
         if need == "painter":
