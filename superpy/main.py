@@ -1,4 +1,5 @@
 # Imports
+import random
 import argparse
 import csv
 from datetime import date
@@ -18,7 +19,8 @@ def main():
             csvFile = csv.reader(file)
             # displaying the contents of the CSV file
             for lines in csvFile:
-                print(lines)
+                pass
+                #print(lines)
     
     except FileNotFoundError:
 
@@ -30,7 +32,7 @@ def main():
 
 
     
-    # stdin_fileno = sys.stdin ,,,,,
+    # stdin_fileno = sys.stdin
  
     # # Keeps reading from stdin and quits only if the word 'exit' is there
     # # This loop, by default does not terminate, since stdin is open
@@ -50,19 +52,48 @@ def main():
     #     # Prints to stdout
     #     stdout_fileno.write(ip + '\n')
 
-    # parser = argparse.ArgumentParser(description='Process some integers.')
-    # parser.add_argument('integers', metavar='N', type=int, nargs='+',
-    #                 help='an integer for the accumulator')
-    # parser.add_argument('--sum', dest='accumulate', action='store_const',
-    #                 const=sum, default=max,
-    #                 help='sum the integers (default: find the max)')
+    parser = argparse.ArgumentParser(description='Shop inventory management! example Input "productname", "count","buy date", buy_price", "exparation date" ')
+    parser.add_argument('product', type=str, help='Pruduct name')
+    parser.add_argument('count', type=int, help='How many products have you bought')
+    parser.add_argument('buy_date', type=str, help='When did you by the product "date"')
+    parser.add_argument('price', type= int, help='price off the product you pay')
+    parser.add_argument('exparation', type= str, help='Whats the exparation date')
 
-    # args = parser.parse_args()
-    # print(args.accumulate(args.integers))  
+    parser.add_argument("-v", "--verbose", action="store_true", help="increase output verbosity")
 
-    # parser = argparse.ArgumentParser()
-    # parser.add_argument('--foo', help='foo help')
-    # args = parser.parse_args()
+    args = parser.parse_args()
+    shop_list = []
+    shop_list.append(random.randint(1000, 9999))
+    shop_list.append(args.product)
+    shop_list.append(args.count)
+    shop_list.append(args.buy_date)
+    shop_list.append(args.price)
+    shop_list.append(args.exparation)
+
+    with open(filename, 'a+', newline='') as csvfile:
+    # Create a writer object from csv module
+        csvwriter = csv.writer(csvfile)
+    # Add contents of list as last row in the csv file
+        csvwriter.writerow(shop_list)
+  
+    with open(filename, mode ='r')as file:
+            # reading the CSV file
+        csvFile = csv.reader(file)
+            # displaying the contents of the CSV file
+        for lines in csvFile:
+            print(lines)
+
+    if args.verbose:
+        print(f"You bought {shop_list}")
+    else:
+        with open(filename, mode ='r')as file:
+            # reading the CSV file
+            csvFile = csv.reader(file)
+            # displaying the contents of the CSV file
+            for lines in csvFile:
+                print(lines)   
+  
+
 
 
 
