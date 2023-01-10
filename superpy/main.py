@@ -28,72 +28,63 @@ def main():
             csvwriter = csv.writer(csvfile)
             csvwriter.writerow(fields)
 
-
-
-
+    def report():
+        pass
     
-    # stdin_fileno = sys.stdin
- 
-    # # Keeps reading from stdin and quits only if the word 'exit' is there
-    # # This loop, by default does not terminate, since stdin is open
-    # for line in stdin_fileno:
-    #     # Remove trailing newline characters using strip()
-    #     if 'exit' == line.strip():
-    #         print('Found exit. Terminating the program')
-    #         exit(0)
-    #     else:
-    #         print('Message from sys.stdin: ---> {} <---'.format(line))
+    def test():
+        global filename
+        # create the parser for the "foo" command
+        
+        parser = argparse.ArgumentParser(description='example Input "productname", "count","buy date", "buy_price", "exparation date" ')
+        parser.add_argument('product', type=str, help='Pruduct name')
+        parser.add_argument('count', type=int, help='How many products have you bought')
+        parser.add_argument('buy_date', type=str, help='When did you buy the product "date"')
+        parser.add_argument('price', type= int, help='price off the product you pay')
+        parser.add_argument('exparation', type= str, help='Whats the exparation date')
+        args = parser.parse_args()
+        
+        shop_list = []
+        shop_list.append(random.randint(1000, 9999))
+        shop_list.append(args.product)
+        shop_list.append(args.count)
+        shop_list.append(args.buy_date)
+        shop_list.append(args.price)
+        shop_list.append(args.exparation)
+    
 
-    # stdout_fileno = sys.stdout
- 
-    # sample_input = ['Hi', 'Hello from AskPython', 'exit']
- 
-    # for ip in sample_input:
-    #     # Prints to stdout
-    #     stdout_fileno.write(ip + '\n')
-
-    parser = argparse.ArgumentParser(description='Shop inventory management! example Input "productname", "count","buy date", buy_price", "exparation date" ')
-    parser.add_argument('product', type=str, help='Pruduct name')
-    parser.add_argument('count', type=int, help='How many products have you bought')
-    parser.add_argument('buy_date', type=str, help='When did you by the product "date"')
-    parser.add_argument('price', type= int, help='price off the product you pay')
-    parser.add_argument('exparation', type= str, help='Whats the exparation date')
-
-    parser.add_argument("-v", "--verbose", action="store_true", help="increase output verbosity")
-
-    args = parser.parse_args()
-    shop_list = []
-    shop_list.append(random.randint(1000, 9999))
-    shop_list.append(args.product)
-    shop_list.append(args.count)
-    shop_list.append(args.buy_date)
-    shop_list.append(args.price)
-    shop_list.append(args.exparation)
-
-    with open(filename, 'a+', newline='') as csvfile:
-    # Create a writer object from csv module
-        csvwriter = csv.writer(csvfile)
-    # Add contents of list as last row in the csv file
-        csvwriter.writerow(shop_list)
+        with open(filename, 'a+', newline='') as csvfile:
+      # Create a writer object from csv module
+            csvwriter = csv.writer(csvfile)
+       # Add contents of list as last row in the csv file
+            csvwriter.writerow(shop_list)
   
-    with open(filename, mode ='r')as file:
-            # reading the CSV file
-        csvFile = csv.reader(file)
-            # displaying the contents of the CSV file
-        for lines in csvFile:
-            print(lines)
-
-    if args.verbose:
-        print(f"You bought {shop_list}")
-    else:
         with open(filename, mode ='r')as file:
-            # reading the CSV file
+           # reading the CSV file
             csvFile = csv.reader(file)
             # displaying the contents of the CSV file
             for lines in csvFile:
-                print(lines)   
-  
+                print(lines)
 
+        if args.verbose:
+            print(f"You bought {shop_list}")
+        else:
+            with open(filename, mode ='r')as file:
+            # reading the CSV file
+                csvFile = csv.reader(file)
+            # displaying the contents of the CSV file
+                for lines in csvFile:
+                    print(lines)   
+  
+    parser = argparse.ArgumentParser(description='Shop inventory management!')
+    FUNCTION_MAP = {'buy' : test,
+                'report' : report }
+
+    parser.add_argument('command', choices=FUNCTION_MAP.keys())
+
+    args = parser.parse_args()
+
+    func = FUNCTION_MAP[args.command]
+    func()
 
 
 
