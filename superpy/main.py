@@ -33,17 +33,10 @@ def main():
     def report():
         df = pd.read_csv(filename)
         print(df.head())
-        # with open(filename, mode ='r')as file:
-        #     # reading the CSV file
-        #     csvFile = csv.reader(file)
-        #     # displaying the contents of the CSV file
-        #     for lines in csvFile:
-        #         print(lines)
-    
 
     def test():
         global filename
-        
+
         parser = argparse.ArgumentParser(description='example Input "productname", "count","buy date", "buy_price", "exparation date" ')
         parser.add_argument('id', type=int, default= random.randint(1000, 9999))
         parser.add_argument('product', type=str, help='Product name')
