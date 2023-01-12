@@ -2,10 +2,8 @@
 import random
 import argparse
 import csv
-from datetime import date
+from datetime import datetime as dt
 import pandas as pd
-import datetime
-
 
 # Do not change these lines.
 __winc_id__ = "a2bc36ea784242e4989deb157d527ba0"
@@ -15,17 +13,27 @@ __human_name__ = "superpy"
 # Your code below this line.
 
 file_bought = "bought.csv"
-file_sold = "sold.csv" 
+file_sold = "sold.csv"
+now = dt.now()
+
+def date_txt_file():
+    # Getting current date and time
+    today_date = now.strftime("%d-%m-%Y") + '.txt'
+    return today_date
 
 def report_bought():
     df = pd.read_csv(file_bought)
     with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
         print(df)
+    write_day_file()
+
+
 
 def report_sold():
     df = pd.read_csv(file_sold)
     with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
         print(df)
+
 
 def ad_to_list(): 
     shop_list = []
@@ -47,8 +55,10 @@ def ad_to_list():
     with open(file_bought,'a+', newline='') as csvfile:
     # Create a writer object from csv module
         csvwriter = csv.writer(csvfile)
-        csvwriter.writerow(shop_list) 
-
+        csvwriter.writerow(shop_list)
+     
+    write_day_file()
+   
 
 def ad_sell_list():
     sell_list = []
@@ -72,8 +82,17 @@ def ad_sell_list():
         csvwriter.writerow(sell_list) 
 
 def advance_t():
+    day = now.strftime("%d-%m-%Y")
     nr = args.days
     print(nr)
+    # with open(file, 'w') as file:
+    #     print(data)
+
+def write_day_file():
+    data = pd.read_csv(file_bought, usecols=[1,2,4,5])
+    file = date_txt_file()
+    data.to_csv(file, index=False)
+ 
     
 def products():
     pass
@@ -112,6 +131,7 @@ parser_a.add_argument('buy_date', type=str, help='When did you buy the product "
 parser_a.add_argument('price', type= float, help='price off the product you pay')
 parser_a.add_argument('exparation', type= str, help='Whats the exparation date')
 parser_a.set_defaults(func=ad_to_list)
+
 
     # create the parser for the "b" command
 parser_b = subparsers.add_parser('b', help='b help')
