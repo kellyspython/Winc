@@ -4,6 +4,7 @@ import argparse
 import csv
 from datetime import date
 import pandas as pd
+import datetime
 
 
 # Do not change these lines.
@@ -70,11 +71,33 @@ def ad_sell_list():
         csvwriter = csv.writer(csvfile)
         csvwriter.writerow(sell_list) 
 
+def advance_t():
+    nr = args.days
+    print(nr)
+    
+def products():
+    pass
+
+def total_products():
+    pass
+
+def price_bought():
+    pass
+
+def sold_price():
+    pass
+
+def experation():
+    pass
+
+def is_expired():
+    pass
+
 parser = argparse.ArgumentParser(description='Shop inventory management!')
 parser.add_argument('--foo', action='store_true', help='foo help')
 subparsers = parser.add_subparsers(help='sub-command help')
 
-    # Create a report subcommand    
+    # Create a subcommand    
 parser_report = subparsers.add_parser('report_bought', help='print bought report')
 parser_report.set_defaults(func=report_bought)
 
@@ -108,6 +131,11 @@ parser_d.set_defaults(func=ad_sell_list)
    # create the parser for the "e" command
 parser_e = subparsers.add_parser('e', help='e help')
 parser_e.add_argument('report_sold', help='How many products have you sold')
+
+   # create the parser for the "f" command
+parser_f = subparsers.add_parser('advance_time', help='How many days back?')
+parser_f.add_argument('days', type=int, help='How many products have you sold')
+parser_f.set_defaults(func=advance_t)
 
 args = parser.parse_args()
 args.func()
