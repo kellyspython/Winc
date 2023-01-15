@@ -4,6 +4,10 @@ import argparse
 import csv
 from datetime import datetime as dt
 import pandas as pd
+from date_time import datum
+
+
+
 
 # Do not change these lines.
 __winc_id__ = "a2bc36ea784242e4989deb157d527ba0"
@@ -84,9 +88,15 @@ def ad_sell_list():
 def advance_t():
     day = now.strftime("%d-%m-%Y")
     nr = args.days
-    print(nr)
-    # with open(file, 'w') as file:
-    #     print(data)
+    txt_file = (datum(nr)) + ".txt"
+    try:
+        with open(txt_file, 'r') as file:
+            df = pd.read_csv(file)
+            #file_contents = file.read()
+            print(df)
+
+    except FileNotFoundError:
+        print("File not found")
 
 def write_day_file():
     data = pd.read_csv(file_bought, usecols=[1,2,4,5])
