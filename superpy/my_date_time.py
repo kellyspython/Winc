@@ -1,7 +1,22 @@
 #importing necessary functions
 import datetime
 from datetime import date
+from datetime import datetime as dt
 import pandas as pd
+
+now = dt.now()
+
+def date_txt_file():
+    # Getting current date and time
+    today_date = now.strftime("%d-%m-%Y") + '.txt'
+    
+    return today_date
+
+def date_today():
+    # Getting current date and time
+    today = now.strftime("%d-%m-%Y")
+    return today
+
 
 def datum(days):
     #storing the value of date.today in a variable today
@@ -14,6 +29,6 @@ def datum(days):
     n_payday= payday - chqday
     #printing the payday
     day = n_payday.strftime("%d-%m-%Y")
-
     return day
+
 

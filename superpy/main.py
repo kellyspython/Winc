@@ -4,9 +4,10 @@ import argparse
 import csv
 from datetime import datetime as dt
 import pandas as pd
-from date_time import datum
-
-
+from my_date_time import datum
+from my_date_time import date_txt_file
+from my_date_time import date_today
+import os, shutil
 
 
 # Do not change these lines.
@@ -18,17 +19,25 @@ __human_name__ = "superpy"
 
 file_bought = "bought.csv"
 file_sold = "sold.csv"
+cwd = os.getcwd()
+path = os.path.join(cwd, "txt_files")
 now = dt.now()
 
-def date_txt_file():
-    # Getting current date and time
-    today_date = now.strftime("%d-%m-%Y") + '.txt'
-    return today_date
+def txt_folder():
+    cwd = os.getcwd()
+    path = os.path.join(cwd, "txt_files")
+    
+    if os.path.exists(path):
+        pass
+    else:
+        os.mkdir(path)        
 
 def report_bought():
     df = pd.read_csv(file_bought)
+    df.head(3)
     with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
         print(df)
+    txt_folder()
     write_day_file()
 
 
@@ -51,7 +60,7 @@ def ad_to_list():
     shop_list.append(random_number)     
     shop_list.append(args.product)
     shop_list.append(args.count)
-    shop_list.append(args.buy_date)
+    shop_list.append(date_today())
     shop_list.append(args.price)
     shop_list.append(args.exparation)
     print(f"You input is: {shop_list}")
@@ -60,9 +69,16 @@ def ad_to_list():
     # Create a writer object from csv module
         csvwriter = csv.writer(csvfile)
         csvwriter.writerow(shop_list)
-     
+    txt_folder()    
     write_day_file()
+     
+def check_inventory(count):
+    df = pd.read_csv(file_bought)
+    if df[(df["id"] == args.bought_id) & (df["Count"] < args.sell_count)]:
+        print( "Your product is out of stock")
    
+
+
 
 def ad_sell_list():
     sell_list = []
@@ -75,33 +91,38 @@ def ad_sell_list():
             random_number = random.randint(1000, 9999)
     sell_list.append(random_number)     
     sell_list.append(args.bought_id)
+    sell_list.append(args.sell_count)
     sell_list.append(args.sell_date)
     sell_list.append(args.sell_price)
- 
+    check_inventory(args.sell_count)
     print(f"You input is: {sell_list}")
 
     with open(file_sold, 'a+', newline='') as csvfile:
     # Create a writer object from csv module
         csvwriter = csv.writer(csvfile)
         csvwriter.writerow(sell_list) 
+    check_inventory()
+
 
 def advance_t():
     day = now.strftime("%d-%m-%Y")
     nr = args.days
     txt_file = (datum(nr)) + ".txt"
+    
     try:
+        os.chdir("txt_files")
         with open(txt_file, 'r') as file:
             df = pd.read_csv(file)
-            #file_contents = file.read()
             print(df)
-
     except FileNotFoundError:
         print("File not found")
 
 def write_day_file():
     data = pd.read_csv(file_bought, usecols=[1,2,4,5])
     file = date_txt_file()
-    data.to_csv(file, index=False)
+    file_path = path + "\\" + file
+    print(file_path)
+    data.to_csv(file_path, index=False)
  
     
 def products():
@@ -137,7 +158,6 @@ parser_report.set_defaults(func=report_sold)
 parser_a = subparsers.add_parser('buy', help='buy help')
 parser_a.add_argument('product', type=str, help='Product name')
 parser_a.add_argument('count', type=int, help='How many products have you bought')
-parser_a.add_argument('buy_date', type=str, help='When did you buy the product "date"')
 parser_a.add_argument('price', type= float, help='price off the product you pay')
 parser_a.add_argument('exparation', type= str, help='Whats the exparation date')
 parser_a.set_defaults(func=ad_to_list)
@@ -154,6 +174,7 @@ parser_c.add_argument('report_bought', help='How many products have you bought')
      # create the parser for the "d" command
 parser_d = subparsers.add_parser('sell', help='d help')
 parser_d.add_argument('bought_id', type=int, help='Bought ID number')
+parser_d.add_argument('sell_count', type=int, help='count')
 parser_d.add_argument('sell_date', type=str, help='Sell date')
 parser_d.add_argument('sell_price', type=int, help='Sell price')
 parser_d.set_defaults(func=ad_sell_list)
