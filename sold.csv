@@ -1,4 +1,3 @@
-id,Bought ID,Sell date,Sell price
-4513,12354,12-1-2023,2
-5481,12354,12-1-2023,2
-9922,8650,2,16-1-2023,1
+id,Bought_ID,product, Sell_date,Sell_price
+7356,2489,milk,1,16-1-2023,1.2
+6714,2489,milk,1,16-1-2023,1.2

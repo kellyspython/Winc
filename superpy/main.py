@@ -22,11 +22,9 @@ file_sold = "sold.csv"
 cwd = os.getcwd()
 path = os.path.join(cwd, "txt_files")
 now = dt.now()
+id = 0
 
-def txt_folder():
-    cwd = os.getcwd()
-    path = os.path.join(cwd, "txt_files")
-    
+def txt_folder():  
     if os.path.exists(path):
         pass
     else:
@@ -72,37 +70,59 @@ def ad_to_list():
     txt_folder()    
     write_day_file()
      
-def check_inventory(count):
+def check_inventory():
     df = pd.read_csv(file_bought)
-    if df[(df["id"] == args.bought_id) & (df["Count"] < args.sell_count)]:
-        print( "Your product is out of stock")
-   
+    check_stock = df[df["id"] == id]
+    data_top = check_stock.head() 
+    for row in data_top.index:
+        index_nr = row
+    if df.at[index_nr,'Count'] < args.sell_count:
+        print(f"Out of stock. Stock = {df.at[index_nr,'Count']}")
+    
+    else:
+        total = df.at[index_nr,'Count'] - args.sell_count
+        df.at[index_nr,'Count']= total
+        if total < 1:
+            print("This product is now out of stock")
+            df.drop(df.loc[df['Count']==0].index, inplace=True)
+            
+    df.to_csv(file_bought, index=False)
+        
+    
+    
 
+    
 
 
 def ad_sell_list():
     sell_list = []
-
-    with open(file_sold, mode ='r')as file:
-        csvFile = csv.reader(file)
-
-        random_number = random.randint(1000, 9999)
-        if random_number in file:
+    df = pd.read_csv(file_bought)
+    if args.product not in df:
+        print('This product is not in stock')
+    else:
+        check_stock = df[df["product"] == args.product]
+        id_number = check_stock["id"]
+        global id
+        id = int(id_number.values)
+        with open(file_sold, mode ='r')as file:
+            csvFile = csv.reader(file)
             random_number = random.randint(1000, 9999)
-    sell_list.append(random_number)     
-    sell_list.append(args.bought_id)
-    sell_list.append(args.sell_count)
-    sell_list.append(args.sell_date)
-    sell_list.append(args.sell_price)
-    check_inventory(args.sell_count)
-    print(f"You input is: {sell_list}")
+            if random_number in file:
+                random_number = random.randint(1000, 9999)
+        sell_list.append(random_number)     
+        sell_list.append(id)
+        sell_list.append(args.product)
+        sell_list.append(args.sell_count)
+        sell_list.append(args.sell_date)
+        sell_list.append(args.sell_price)
+        #number = args.sell_count
+        check_inventory()
+        print(f"You input is: {sell_list}")
 
-    with open(file_sold, 'a+', newline='') as csvfile:
-    # Create a writer object from csv module
-        csvwriter = csv.writer(csvfile)
+        with open(file_sold, 'a+', newline='') as csvfile:
+        # Create a writer object from csv module
+            csvwriter = csv.writer(csvfile)
         csvwriter.writerow(sell_list) 
-    check_inventory()
-
 
 def advance_t():
     day = now.strftime("%d-%m-%Y")
@@ -118,12 +138,14 @@ def advance_t():
         print("File not found")
 
 def write_day_file():
+    
     data = pd.read_csv(file_bought, usecols=[1,2,4,5])
     file = date_txt_file()
     file_path = path + "\\" + file
-    print(file_path)
-    data.to_csv(file_path, index=False)
- 
+    content = str(data)
+    with open(file_path, 'w') as f:
+        f.write(content)
+
     
 def products():
     pass
@@ -173,10 +195,10 @@ parser_c.add_argument('report_bought', help='How many products have you bought')
 
      # create the parser for the "d" command
 parser_d = subparsers.add_parser('sell', help='d help')
-parser_d.add_argument('bought_id', type=int, help='Bought ID number')
+parser_d.add_argument('product', type=str, help='Productname')
 parser_d.add_argument('sell_count', type=int, help='count')
 parser_d.add_argument('sell_date', type=str, help='Sell date')
-parser_d.add_argument('sell_price', type=int, help='Sell price')
+parser_d.add_argument('sell_price', type=float, help='Sell price')
 parser_d.set_defaults(func=ad_sell_list)
 
    # create the parser for the "e" command
