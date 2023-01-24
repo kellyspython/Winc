@@ -5,8 +5,9 @@ import csv
 from datetime import datetime as dt
 import pandas as pd
 from my_date_time import datum, date_txt_file, date_today
-import os, shutil
+import os
 from my_revenue import Revenue
+from profit import Profit
 
 
 
@@ -42,9 +43,6 @@ def report_bought():
     txt_folder()
     write_day_file()
 
-# def choice():
-#     revenue_choice = args.rev
-#     return revenue_choice
 
 def report_sold():
     df = pd.read_csv(file_sold)
@@ -169,15 +167,24 @@ def choice():
         day = date_today()
         filter_df = df.loc[(df['Buy date'] == day)]
         print(filter_df)
+
 def reven_date():
     given_date = args.rev_date
     Revenue.rev_date_calc(given_date)
+
+def choice_profit():
+    choice = args.prof
+    Profit.profit_calc(choice)
+
+def profit_date():
+    given_date = args.prof_date
+    Profit.prof_date_calc(given_date)
 
 parser = argparse.ArgumentParser(description='Shop inventory management!')
 parser.add_argument('--foo', action='store_true', help='foo help')
 subparsers = parser.add_subparsers(help='sub-command help')
 
-    # Create a subcommands 
+# Create a subcommands 
 parser_report = subparsers.add_parser('report_bought', help='print bought report')
 parser_report.set_defaults(func=report_bought)
     
@@ -193,6 +200,14 @@ parser_products.set_defaults(func=products)
 parser_revenue = subparsers.add_parser('revenue', help='Revenue, CHOICE: "today" or "yesterday"')
 parser_revenue.add_argument('rev', type=str, choices=['today', 'yesterday'])
 parser_revenue.set_defaults(func=choice_rev)
+
+parser_profit = subparsers.add_parser('profit', help='Profit, CHOICE: "today" or "yesterday"')
+parser_profit.add_argument('prof', type=str, choices=['today', 'yesterday'])
+parser_profit.set_defaults(func=choice_profit)
+
+parser_profit_date = subparsers.add_parser('profit_date', help='Profit, give date: "dd-mm-yy"')
+parser_profit_date.add_argument('prof_date', type=str, help='Profit give date: "dd-mm-yy"')
+parser_profit_date.set_defaults(func=profit_date)
 
 parser_revenue_date = subparsers.add_parser('revenue_date', help='Revenue, give date "dd-mm-yy"')
 parser_revenue_date.add_argument('rev_date', type=str, help='Revenue give date')
