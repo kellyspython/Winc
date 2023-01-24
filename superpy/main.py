@@ -6,7 +6,8 @@ from datetime import datetime as dt
 import pandas as pd
 from my_date_time import datum, date_txt_file, date_today
 import os, shutil
-from revenue import revenue_cal
+from my_revenue import Revenue
+
 
 
 # Do not change these lines.
@@ -23,6 +24,10 @@ path = os.path.join(cwd, "txt_files")
 now = dt.now()
 id = 0
 
+def choice_rev():
+    choice = args.rev
+    Revenue.revenue_calc(choice)
+
 def txt_folder():  
     if os.path.exists(path):
         pass
@@ -37,9 +42,9 @@ def report_bought():
     txt_folder()
     write_day_file()
 
-def choice():
-    revenue_choice = args.rev
-    return revenue_choice
+# def choice():
+#     revenue_choice = args.rev
+#     return revenue_choice
 
 def report_sold():
     df = pd.read_csv(file_sold)
@@ -93,32 +98,34 @@ def check_inventory():
 def ad_sell_list():
     sell_list = []
     df = pd.read_csv(file_bought)
-    if args.product not in df:
-        print('This product is not in stock')
-    else:
-        check_stock = df[df["product"] == args.product]
+ 
+    if df['product'].eq(args.sell_product).any():
+        check_stock = df[df["product"] == args.sell_product]
         id_number = check_stock["id"]
         global id
         id = int(id_number.values)
+
         with open(file_sold, mode ='r')as file:
             csvFile = csv.reader(file)
             random_number = random.randint(1000, 9999)
             if random_number in file:
                 random_number = random.randint(1000, 9999)
-        sell_list.append(random_number)     
-        sell_list.append(id)
-        sell_list.append(args.product)
-        sell_list.append(args.sell_count)
-        sell_list.append(args.sell_date)
-        sell_list.append(args.sell_price)
-        #number = args.sell_count
-        check_inventory()
-        print(f"You input is: {sell_list}")
+            sell_list.append(random_number)     
+            sell_list.append(id)
+            sell_list.append(args.sell_product)
+            sell_list.append(args.sell_count)
+            sell_list.append(args.sell_date)
+            sell_list.append(args.sell_price)
+            #number = args.sell_count
+            check_inventory()
+            print(f"You input is: {sell_list}")
 
-        with open(file_sold, 'a+', newline='') as csvfile:
-        # Create a writer object from csv module
-            csvwriter = csv.writer(csvfile)
-        csvwriter.writerow(sell_list) 
+            with open(file_sold, 'a+', newline='') as csvfile:
+            # Create a writer object from csv module
+                csvwriter = csv.writer(csvfile)
+                csvwriter.writerow(sell_list) 
+    else:
+        print('This product is not in stock')
 
 def advance_t():
     day = now.strftime("%d-%m-%Y")
@@ -157,6 +164,14 @@ def is_expired():
         df.drop(df.loc[df['experation date'] < day].index, inplace=True)
         df.to_csv(file_bought, index=False)
         print("products are removed from inventory") 
+def choice():
+    revenue_choice = args.rev
+    if revenue_choice == "today":
+        df = pd.read_csv(file_bought)
+        day = date_today()
+        filter_df = df.loc[(df['Buy date'] == day)]
+        print(filter_df)
+    
 
 parser = argparse.ArgumentParser(description='Shop inventory management!')
 parser.add_argument('--foo', action='store_true', help='foo help')
@@ -176,8 +191,8 @@ parser_products = subparsers.add_parser('products', help='print products')
 parser_products.set_defaults(func=products)
 
 parser_revenue = subparsers.add_parser('revenue', help='Revenue, CHOICE: "today","yesterday", "date mm-yy"')
-parser_revenue.add_argument('rev', choices=['today', 'yesterday', 'date'])
-parser_revenue.set_defaults(func=choice)
+parser_revenue.add_argument('rev', type=str, choices=['today', 'yesterday', 'date'])
+parser_revenue.set_defaults(func=choice_rev)
 
 parser_buy = subparsers.add_parser('buy', help='buy help')
 parser_buy.add_argument('product', type=str, help='Product name')
@@ -190,7 +205,7 @@ parser_count = subparsers.add_parser('count', help='count help')
 parser_count.add_argument('count', type=int, help='How many products have you bought')
 
 parser_sell = subparsers.add_parser('sell', help='Sell help')
-parser_sell.add_argument('product', type=str, help='Productname')
+parser_sell.add_argument('sell_product', type=str, help='Productname')
 parser_sell.add_argument('sell_count', type=int, help='count')
 parser_sell.add_argument('sell_date', type=str, help='Sell date')
 parser_sell.add_argument('sell_price', type=float, help='Sell price')
@@ -203,7 +218,7 @@ parser_advance_t = subparsers.add_parser('advance_time', help='How many days bac
 parser_advance_t.add_argument('days', type=int, help='How many products have you sold')
 parser_advance_t.set_defaults(func=advance_t)
 
-parser_expired = subparsers.add_parser('expired', help='is_expired help')
+parser_expired = subparsers.add_parser('Is expired', help='is_expired help')
 parser_expired.add_argument('is_expired', help='print is_expired report')
 
 parser_prod_stock = subparsers.add_parser('products_stock', help='products in stock')
