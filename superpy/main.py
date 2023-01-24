@@ -98,13 +98,11 @@ def check_inventory():
 def ad_sell_list():
     sell_list = []
     df = pd.read_csv(file_bought)
- 
     if df['product'].eq(args.sell_product).any():
         check_stock = df[df["product"] == args.sell_product]
         id_number = check_stock["id"]
         global id
         id = int(id_number.values)
-
         with open(file_sold, mode ='r')as file:
             csvFile = csv.reader(file)
             random_number = random.randint(1000, 9999)
@@ -171,7 +169,9 @@ def choice():
         day = date_today()
         filter_df = df.loc[(df['Buy date'] == day)]
         print(filter_df)
-    
+def reven_date():
+    given_date = args.rev_date
+    Revenue.rev_date_calc(given_date)
 
 parser = argparse.ArgumentParser(description='Shop inventory management!')
 parser.add_argument('--foo', action='store_true', help='foo help')
@@ -190,9 +190,13 @@ parser_sold.set_defaults(func=report_sold)
 parser_products = subparsers.add_parser('products', help='print products')
 parser_products.set_defaults(func=products)
 
-parser_revenue = subparsers.add_parser('revenue', help='Revenue, CHOICE: "today","yesterday", "date mm-yy"')
-parser_revenue.add_argument('rev', type=str, choices=['today', 'yesterday', 'date'])
+parser_revenue = subparsers.add_parser('revenue', help='Revenue, CHOICE: "today" or "yesterday"')
+parser_revenue.add_argument('rev', type=str, choices=['today', 'yesterday'])
 parser_revenue.set_defaults(func=choice_rev)
+
+parser_revenue_date = subparsers.add_parser('revenue_date', help='Revenue, give date "dd-mm-yy"')
+parser_revenue_date.add_argument('rev_date', type=str, help='Revenue give date')
+parser_revenue_date.set_defaults(func=reven_date)
 
 parser_buy = subparsers.add_parser('buy', help='buy help')
 parser_buy.add_argument('product', type=str, help='Product name')

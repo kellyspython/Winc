@@ -58,3 +58,28 @@ class Revenue:
                     
             total_revenue = total_sold - total_bought
             print(f"Total renevue for: {day} = € {total_revenue}")
+        
+
+    def rev_date_calc(given_date):
+        total_bought = 0
+        total_sold = 0
+        total_revenue = 0
+        # extract vaulues from File_BOUGHT
+        df = pd.read_csv(FILE_BOUGHT)
+        filter_df = df[(df['Buy date'] == given_date)]
+        id_number = filter_df["id"]
+        indexes = id_number.index
+        for index in indexes:
+            total_bought += df.iloc[index, df.columns.get_loc('Buy price')]
+            
+        # extract vaulues from File_SOLD
+        data = pd.read_csv(FILE_SOLD)
+        filter = data[(data['Sell_date'] == given_date)]
+        dataframe=pd.DataFrame(filter)
+        prices = dataframe.reset_index(drop=True)
+        indexes = prices.index
+        for index in indexes:
+            total_sold += prices.iloc[index, prices.columns.get_loc('Sell_price')]
+                    
+        total_revenue = total_sold - total_bought
+        print(f"Total renevue for: {given_date} = € {total_revenue}")
