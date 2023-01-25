@@ -23,6 +23,11 @@ FILE_SOLD = "sold.csv"
 HEADER_B = ['id','product','Count','Buy date','Buy price','experation date']
 HEADER_S = ['id','Bought_ID','product','Sell_date','Sell_price']
 
+cwd = os.getcwd()
+path = os.path.join(cwd, "txt_files")
+now = dt.now()
+id = 0
+
 def make_files():
 
     try:
@@ -40,15 +45,6 @@ def make_files():
         with open(FILE_SOLD, 'w') as file:
             writer = csv.writer(file)
             writer.writerow(HEADER_S)
-
-
-cwd = os.getcwd()
-path = os.path.join(cwd, "txt_files")
-now = dt.now()
-id = 0
-
-
-
 
 
 def choice_rev():
