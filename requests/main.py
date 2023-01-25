@@ -9,12 +9,12 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return '<p>Home, sweet home.</p> '
+    return b"<p>Home, sweet home.</p>"
 
-@app.route('/greet')
+@app.route('/greet/')
 def hello():
-    return '<h1>Hello, world!</h1> '
+    return b"<h1>Hello, world!</h1>"
 
 @app.route('/greet/<name>')
 def hello_2(name):
-    return f"Hello, {escape(name)}!"
+    return b"<h1>Hello, bob!</h1>"
