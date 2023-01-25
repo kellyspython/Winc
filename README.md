@@ -1,2 +1,0 @@
-# winc
-Winc opdrachten

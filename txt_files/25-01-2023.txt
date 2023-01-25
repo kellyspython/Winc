@@ -1,0 +1,3 @@
+Empty DataFrame
+Columns: [product, Count, Buy price, experation date]
+Index: []

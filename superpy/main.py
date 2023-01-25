@@ -18,12 +18,38 @@ __human_name__ = "superpy"
 
 # Your code below this line.
 
-file_bought = "bought.csv"
-file_sold = "sold.csv"
+FILE_BOUGHT = "bought.csv"
+FILE_SOLD = "sold.csv"
+HEADER_B = ['id','product','Count','Buy date','Buy price','experation date']
+HEADER_S = ['id','Bought_ID','product','Sell_date','Sell_price']
+
+def make_files():
+
+    try:
+        with open(FILE_BOUGHT, 'r') as file:
+            pass
+    except FileNotFoundError:
+        with open(FILE_BOUGHT, 'w') as file:
+            writer = csv.writer(file)
+            writer.writerow(HEADER_B)
+
+    try:
+        with open(FILE_SOLD, 'r') as file:
+            pass
+    except FileNotFoundError:
+        with open(FILE_SOLD, 'w') as file:
+            writer = csv.writer(file)
+            writer.writerow(HEADER_S)
+
+
 cwd = os.getcwd()
 path = os.path.join(cwd, "txt_files")
 now = dt.now()
 id = 0
+
+
+
+
 
 def choice_rev():
     choice = args.rev
@@ -36,23 +62,25 @@ def txt_folder():
         os.mkdir(path)        
 
 def report_bought():
-    df = pd.read_csv(file_bought)
+    make_files()
+    df = pd.read_csv(FILE_BOUGHT)
     df.head(3)
-    with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
+    with pd.option_context('display.max_rows', None, 'display.max_columns', None):
         print(df)
     txt_folder()
     write_day_file()
 
 
 def report_sold():
-    df = pd.read_csv(file_sold)
-    with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
+    df = pd.read_csv(FILE_SOLD)
+    with pd.option_context('display.max_rows', None, 'display.max_columns', None):
         print(df)
 
 
-def ad_to_list(): 
+def ad_to_list():
+    make_files() 
     shop_list = []
-    with open(file_bought, mode ='r')as file:
+    with open(FILE_BOUGHT, mode ='r')as file:
            # reading the CSV file
         csvFile = csv.reader(file)
             # displaying the contents of the CSV file
@@ -67,7 +95,7 @@ def ad_to_list():
     shop_list.append(args.exparation)
     print(f"You input is: {shop_list}")
 
-    with open(file_bought,'a+', newline='') as csvfile:
+    with open(FILE_BOUGHT,'a+', newline='') as csvfile:
     # Create a writer object from csv module
         csvwriter = csv.writer(csvfile)
         csvwriter.writerow(shop_list)
@@ -75,7 +103,8 @@ def ad_to_list():
     write_day_file()
      
 def check_inventory():
-    df = pd.read_csv(file_bought)
+    make_files()
+    df = pd.read_csv(FILE_BOUGHT)
     check_stock = df[df["id"] == id]
     data_top = check_stock.head() 
     for row in data_top.index:
@@ -90,18 +119,19 @@ def check_inventory():
             print("This product is now out of stock")
             df.drop(df.loc[df['Count']==0].index, inplace=True)
             
-    df.to_csv(file_bought, index=False)
+    df.to_csv(FILE_BOUGHT, index=False)
         
 
 def ad_sell_list():
+    make_files()
     sell_list = []
-    df = pd.read_csv(file_bought)
+    df = pd.read_csv(FILE_BOUGHT)
     if df['product'].eq(args.sell_product).any():
         check_stock = df[df["product"] == args.sell_product]
         id_number = check_stock["id"]
         global id
         id = int(id_number.values)
-        with open(file_sold, mode ='r')as file:
+        with open(FILE_SOLD, mode ='r')as file:
             csvFile = csv.reader(file)
             random_number = random.randint(1000, 9999)
             if random_number in file:
@@ -116,7 +146,7 @@ def ad_sell_list():
             check_inventory()
             print(f"You input is: {sell_list}")
 
-            with open(file_sold, 'a+', newline='') as csvfile:
+            with open(FILE_SOLD, 'a+', newline='') as csvfile:
             # Create a writer object from csv module
                 csvwriter = csv.writer(csvfile)
                 csvwriter.writerow(sell_list) 
@@ -127,7 +157,7 @@ def advance_t():
     day = now.strftime("%d-%m-%Y")
     nr = args.days
     txt_file = (datum(nr)) + ".txt"
-    
+
     try:
         os.chdir("txt_files")
         with open(txt_file, 'r') as file:
@@ -137,8 +167,8 @@ def advance_t():
         print("File not found")
 
 def write_day_file():
-    
-    data = pd.read_csv(file_bought, usecols=[1,2,4,5])
+
+    data = pd.read_csv(FILE_BOUGHT, usecols=[1,2,4,5])
     file = date_txt_file()
     file_path = path + "\\" + file
     content = str(data)
@@ -147,23 +177,26 @@ def write_day_file():
 
     
 def products():
-    data = pd.read_csv(file_bought, usecols=[1,2,4,5])
+    make_files()
+    data = pd.read_csv(FILE_BOUGHT, usecols=[1,2,4,5])
     print(data)
 
 def is_expired():
-    df = pd.read_csv(file_bought)
+    make_files()
+    df = pd.read_csv(FILE_BOUGHT)
     day = date_today()
     filter_df = df.loc[(df['experation date'] < day)]
     print(filter_df)
     answer = input("delete rows j/n : ")
     if answer == 'j':
         df.drop(df.loc[df['experation date'] < day].index, inplace=True)
-        df.to_csv(file_bought, index=False)
+        df.to_csv(FILE_BOUGHT, index=False)
         print("products are removed from inventory") 
+
 def choice():
     revenue_choice = args.rev
     if revenue_choice == "today":
-        df = pd.read_csv(file_bought)
+        df = pd.read_csv(FILE_BOUGHT)
         day = date_today()
         filter_df = df.loc[(df['Buy date'] == day)]
         print(filter_df)
@@ -180,7 +213,7 @@ def profit_date():
     given_date = args.prof_date
     Profit.prof_date_calc(given_date)
 
-parser = argparse.ArgumentParser(description='Shop inventory management!')
+parser = argparse.ArgumentParser(description='Shop inventory manager!')
 parser.add_argument('--foo', action='store_true', help='foo help')
 subparsers = parser.add_subparsers(help='sub-command help')
 
@@ -217,7 +250,7 @@ parser_buy = subparsers.add_parser('buy', help='buy help')
 parser_buy.add_argument('product', type=str, help='Product name')
 parser_buy.add_argument('count', type=int, help='How many products have you bought')
 parser_buy.add_argument('price', type= float, help='price off the product you pay')
-parser_buy.add_argument('exparation', type= str, help='Whats the exparation date')
+parser_buy.add_argument('expiration', type= str, help='Whats the expiration date')
 parser_buy.set_defaults(func=ad_to_list)
 
 parser_count = subparsers.add_parser('count', help='count help')
