@@ -26,5 +26,8 @@ def test_about(client):
     assert response.status_code == 200
     assert b"<title>About</title>" in response.data
 
-
 """ Write your own tests below."""
+def test_winc(client):
+    response = client.get("/winc")
+    assert response.status_code == 200
+    assert b"<title>Winc</title>" in response.data
