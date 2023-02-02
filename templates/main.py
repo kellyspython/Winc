@@ -17,3 +17,7 @@ def index():
 @app.route("/about")
 def about():
     return b"<title>About</title>"
+
+@app.route("/winc")
+def winc():
+    return b"<title>Winc</title>"
