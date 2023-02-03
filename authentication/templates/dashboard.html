@@ -1,5 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
 <p>Hello  <strong>{{name}}</strong></p>
+{% if name == "Alice"  %}
+<p>This is only for {{name}} </p>
+{% elif name == "Bob" %}
+<p>Welkom Bob on your personal account</p>
+{% else %}
+<p></p>
+{% endif %}
 {% endblock content %}
 

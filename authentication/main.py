@@ -18,7 +18,10 @@ def redirect_index():
 
 @app.route("/")
 def index():
-    return render_template("index.html", title="Index")
+    if not session.get('logged_in'):
+        return render_template("index.html", title="Index")
+    else:
+        return redirect('/dashboard/{user}')
 
 
 @app.route("/about")
@@ -43,7 +46,8 @@ def login():
             
             if user_hash_password == users[user]:
                 session['username'] = request.form['username']
-                return redirect('/dashboard')
+                session['logged_in'] = True
+                return redirect('/dashboard/{user}')
             else:
                 error = 'Invalid username/password'
                 return render_template('login.html', error=error)
@@ -51,8 +55,8 @@ def login():
     return render_template("login.html", title="Login")
 
 
-@app.route("/dashboard")
-def dashboard():
+@app.route("/dashboard/{<user>}")
+def dashboard(user):
     if 'username' in session:
         s = session['username']  
         return render_template("dashboard.html", name=s)
@@ -62,5 +66,6 @@ def dashboard():
 
 @app.route("/logout", methods=["GET", "POST"])
 def logout():
-    # YOUR SOLUTION HERE
-    pass
+
+    session['logged_in'] = False
+    return redirect('/')

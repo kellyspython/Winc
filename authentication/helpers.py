@@ -14,3 +14,9 @@ def get_users():
 
 def hash_password(password):
     return sha3_512(password.encode("utf-8")).hexdigest()
+
+def user_profile(name):
+    Alice = 'mister.jpeg'
+    if name == Alice:
+        return Alice
+
