@@ -166,8 +166,9 @@ def write_day_file():
     file = date_txt_file()
     file_path = path + "\\" + file
     content = str(data)
-    with open(file_path, 'w') as f:
-        f.write(content)
+    with open(file_path, 'w') as file_txt:
+        file_txt.write(content)
+
 
     
 def products():
