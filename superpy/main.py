@@ -88,7 +88,7 @@ def ad_to_list():
     shop_list.append(args.count)
     shop_list.append(date_today())
     shop_list.append(args.price)
-    shop_list.append(args.exparation)
+    shop_list.append(args.expiration)
     print(f"You input is: {shop_list}")
 
     with open(FILE_BOUGHT,'a+', newline='') as csvfile:
@@ -128,7 +128,6 @@ def ad_sell_list():
         global id
         id = int(id_number.values)
         with open(FILE_SOLD, mode ='r')as file:
-            csvFile = csv.reader(file)
             random_number = random.randint(1000, 9999)
             if random_number in file:
                 random_number = random.randint(1000, 9999)
@@ -150,7 +149,6 @@ def ad_sell_list():
         print('This product is not in stock')
 
 def advance_t():
-    day = now.strftime("%d-%m-%Y")
     nr = args.days
     txt_file = (datum(nr)) + ".txt"
 
