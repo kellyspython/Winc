@@ -8,6 +8,8 @@ from my_date_time import datum, date_txt_file, date_today
 import os
 from my_revenue import Revenue
 from profit import Profit
+import uuid
+
 
 
 
@@ -26,7 +28,7 @@ HEADER_S = ['id','Bought_ID','product','Sell_date','Sell_price']
 cwd = os.getcwd()
 path = os.path.join(cwd, "txt_files")
 now = dt.now()
-id = 0
+id = ''
 
 def make_files():
 
@@ -65,6 +67,8 @@ def report_bought():
         print(df)
     txt_folder()
     write_day_file()
+    
+   
 
 
 def report_sold():
@@ -76,14 +80,11 @@ def report_sold():
 def ad_to_list():
     make_files() 
     shop_list = []
+    unique_id = uuid.uuid1().hex[:8]
     with open(FILE_BOUGHT, mode ='r')as file:
-           # reading the CSV file
         csvFile = csv.reader(file)
-            # displaying the contents of the CSV file
-        random_number = random.randint(1000, 9999)
-        if random_number in file:
-            random_number = random.randint(1000, 9999)
-    shop_list.append(random_number)     
+           
+    shop_list.append(unique_id)     
     shop_list.append(args.product)
     shop_list.append(args.count)
     shop_list.append(date_today())
@@ -102,6 +103,7 @@ def check_inventory():
     make_files()
     df = pd.read_csv(FILE_BOUGHT)
     check_stock = df[df["id"] == id]
+    print(check_stock)
     data_top = check_stock.head() 
     for row in data_top.index:
         index_nr = row
@@ -119,19 +121,17 @@ def check_inventory():
         
 
 def ad_sell_list():
+    global id
     make_files()
     sell_list = []
     df = pd.read_csv(FILE_BOUGHT)
     if df['product'].eq(args.sell_product).any():
         check_stock = df[df["product"] == args.sell_product]
-        id_number = check_stock["id"]
-        global id
-        id = int(id_number.values)
+        id_str = check_stock["id"].values
+        id = id_str[0]
+        unique_id = uuid.uuid1().hex[:8]
         with open(FILE_SOLD, mode ='r')as file:
-            random_number = random.randint(1000, 9999)
-            if random_number in file:
-                random_number = random.randint(1000, 9999)
-            sell_list.append(random_number)     
+            sell_list.append(unique_id)     
             sell_list.append(id)
             sell_list.append(args.sell_product)
             sell_list.append(args.sell_count)
@@ -161,12 +161,13 @@ def advance_t():
         print("File not found")
 
 def write_day_file():
-
+    directory = "txt_files"
     data = pd.read_csv(FILE_BOUGHT, usecols=[1,2,4,5])
     file = date_txt_file()
-    file_path = path + "\\" + file
+    location = os.path.join(cwd, directory)
+    path = os.path.join(location, file) 
     content = str(data)
-    with open(file_path, 'w') as file_txt:
+    with open(path, 'w') as file_txt:
         file_txt.write(content)
 
 
